@@ -1,12 +1,31 @@
-5
+15
 ##start
-Room1 0 1
-Room2 1 2
-#commentaire
-Room3 1 0
+RoomA 0 6
+RoomB 1 2
+##PROUT
+#CACA
+RoomC 1 0
+RoomD 1 0
+RoomE 1 0
+RoomF 1 0
+RoomG 1 0
+RoomH 1 0
+RoomI 1 0
 ##end
-Room4 2 1
-Room1-Room2
-Room1-Room3
-Room2-Room4
-Room3-Room4
+RoomJ 2 1
+RoomA-RoomB
+RoomA-RoomC
+RoomA-RoomD
+RoomB-RoomC
+RoomD-RoomC
+RoomD-RoomF
+RoomB-RoomE
+RoomC-RoomE
+RoomC-RoomF
+RoomE-RoomG
+RoomF-RoomG
+RoomF-RoomI
+RoomG-RoomH
+RoomG-RoomI
+RoomH-RoomJ
+RoomI-RoomJ

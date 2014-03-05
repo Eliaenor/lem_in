@@ -12,171 +12,78 @@
 
 #include "lem-in.h"
 
+int		ft_setup(t_data *data)
+{
+	data-> rooms = NULL;
+	data-> first_room = NULL;
+	data-> last_room = NULL;
+	data-> way = NULL;
+	data-> first_way = NULL;
+	data-> last_way = NULL;
+	return (0);
+}
+
 int		main(void)
 {
 	char	*line;
 	t_data	data;
-	int		i;
-	int		test;
-	t_room	*room;
-	t_room	*tmp;
+	int		ret;
 
-	i = 0;
-	test = 0;
+	ft_setup(&data);
 	get_next_line(0, &line);
-	while (line[i])
-	{
-		if (ft_isdigit(line[i]) == 0)
-			test++;
-		i++;
-	}
-	if ((int)ft_strlen(line) - 1 == test)
-		data.nbr_ants = ft_atoi(line);
+	ft_putendl(line);
+	if (get_nbr_ants(&data, line) == 1)
+		return (1);
 	while (get_next_line(0, &line))
 	{
-		if (ft_strcmp(line, "##start") == 0)
+		ret = ft_parsing(&data, line);
+		if (ret == 1)
 		{
-			free(line);
-			get_next_line(0, &line);
-			room = ft_new_room(&data, line);
-			if (data.rooms == NULL)
-				data.rooms = room;
-			else
-			{
-				tmp = data.rooms;
-				while (tmp->next != NULL)
-					tmp = tmp->next;
-				tmp->next = room;
-			}
-			data.first_room = room;
-			data.first_room->special = 1;
-			free(line);
+			ft_putstr("ERROR : Syntax Error\n");
+			return (1);
 		}
-		else if (ft_strcmp(line, "##end") == 0)
-		{
-			free(line);
-			get_next_line(0, &line);
-			ft_putstr("TEST");
-			room = ft_new_room(&data, line);
-			if (data.rooms == NULL)
-				data.rooms = room;
-			else
-			{
-				tmp = data.rooms;
-				while (tmp->next != NULL)
-					tmp = tmp->next;
-				tmp->next = room;
-			}
-			data.last_room = room;
-			data.last_room->special = LAST;
-			free(line);
-		}
-		else if (line[0] == '#')
-			free(line);
-		else if (ft_strchr(line, ' ') != NULL)
-		{
-			if (data.rooms == NULL)
-				data.rooms = ft_new_room(&data, line);
-			else
-			{
-				tmp = data.rooms;
-				room = ft_new_room(&data, line);
-				while (tmp->next != NULL)
-					tmp = tmp->next;
-				tmp->next = room;
-			}
-			free(line);
-		}
-		else
-		{
-			ft_putstr("Else : ");
-			ft_putendl(line);
-			free(line);
-		}
+		if (ret == 2)
+			break;
 	}
-	data.nbr_rooms = 0;
-	tmp = data.rooms;
-	while (tmp->next != NULL)
+	way_manager(&data);
+	return (0);
+}
+
+int		display_moove(t_way **tbl, t_data *data)
+{
+	int		i;
+
+	i = 0;
+	while (i != data->nbr_ants)
 	{
-		data.nbr_rooms++;
-		tmp = tmp->next;
-		if (tmp->next == NULL)
-			data.nbr_rooms++;
-	}
-	ft_putstr("Number of ants = ");
-	ft_putnbr(data.nbr_ants);
-	ft_putstr("\n");
-	ft_putstr("Number of room = ");
-	ft_putnbr(data.nbr_rooms);
-	tmp = data.rooms;
-	while (tmp->next != NULL)
-	{
-		if (tmp->special == FIRST)
+		if (tbl[i] && tbl[i] != data->first_way)
 		{
-			ft_putstr("\nFirst = ");
-			ft_putstr(tmp->name);
-			ft_putstr(" x = ");
-			ft_putnbr(tmp->x);
-			ft_putstr(" y = ");
-			ft_putnbr(tmp->y);
+			ft_putstr("L");
+			ft_putnbr(i + 1);
+			ft_putstr("-");
+			ft_putstr(tbl[i]->name);
+			ft_putstr(" ");
 		}
-		tmp = tmp->next;
-		if (tmp->next == NULL && tmp->special == FIRST)
-		{
-			ft_putstr("\nFirst = ");
-			ft_putstr(tmp->name);
-			ft_putstr(" x = ");
-			ft_putnbr(tmp->x);
-			ft_putstr(" y = ");
-			ft_putnbr(tmp->y);
-		}
-	}
-	tmp = data.rooms;
-	while (tmp->next != NULL)
-	{
-		if (tmp->special == LAST)
-		{
-			ft_putstr("\nLast = ");
-			ft_putstr(tmp->name);
-			ft_putstr(" x = ");
-			ft_putnbr(tmp->x);
-			ft_putstr(" y = ");
-			ft_putnbr(tmp->y);
-		}
-		tmp = tmp->next;
-		if (tmp->next == NULL && tmp->special == LAST)
-		{
-			ft_putstr("\nLast = ");
-			ft_putstr(tmp->name);
-			ft_putstr(" x = ");
-			ft_putnbr(tmp->x);
-			ft_putstr(" y = ");
-			ft_putnbr(tmp->y);
-		}
-	}
-	tmp = data.rooms;
-	while (tmp->next != NULL)
-	{
-		if (tmp->special == NORMAL)
-		{
-			ft_putstr("\nRoom = ");
-			ft_putstr(tmp->name);
-			ft_putstr(" x = ");
-			ft_putnbr(tmp->x);
-			ft_putstr(" y = ");
-			ft_putnbr(tmp->y);
-		}
-		tmp = tmp->next;
-		if (tmp->next == NULL && tmp->special == NORMAL)
-		{
-			ft_putstr("\nRoom = ");
-			ft_putstr(tmp->name);
-			ft_putstr(" x = ");
-			ft_putnbr(tmp->x);
-			ft_putstr(" y = ");
-			ft_putnbr(tmp->y);
-		}
+		i++;
 	}
 	ft_putstr("\n");
 	return (0);
 }
+
+int		get_nbr_ants(t_data *data, char *line)
+{
+	if (ft_isnumber(line) == 1)
+		data->nbr_ants = ft_atoi(line);
+	else
+	{
+		ft_putstr("ERROR : Incorect Number of ants.\n");
+		return (1);
+	}
+	if (data->nbr_ants == 0)
+	{
+		ft_putstr("ERROR : Put at least 1 ant.\n");
+		return (1);
+	}
+	return (0);
+}
+

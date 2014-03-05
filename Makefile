@@ -12,7 +12,7 @@
 
 NAME = lem-in
 
-SRC_C = main.c new_room.c
+SRC_C = main.c new_room.c aff_test.c way.c ft_parsing.c ft_dijkstra.c
 
 LIB_A = libft.a
 

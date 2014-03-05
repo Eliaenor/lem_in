@@ -19,25 +19,25 @@
 # define LAST		2
 # define NORMAL		0
 
-
-
 typedef struct			s_room
 {
 	char				*name;
 	int					x;
 	int					y;
+	int					weight;
 	int					special;
-	int					ants_here;
-	struct	s_room		**connect_room;
-	struct	s_room		*next;
+	struct s_room		*prev_way;
+	struct s_room		**connect_room;
+	struct s_room		*next;
 }						t_room;
 
-typedef struct			s_link
+typedef struct			s_way
 {
-	t_room				*room1;
-	t_room				*room2;
-	struct	s_link		*next;
-}						t_link;
+	char				*name;
+	int					ant;
+	struct s_way		*prev;
+	struct s_way		*next;
+}						t_way;
 
 typedef struct	s_data
 {
@@ -46,9 +46,51 @@ typedef struct	s_data
 	t_room		*rooms;
 	t_room		*first_room;
 	t_room		*last_room;
-	t_link		*links;
+	t_way		*way;
+	t_way		*first_way;
+	t_way		*last_way;
 }				t_data;
 
-t_room	*ft_new_room(t_data *data, char *line);
+/*
+** main.c **
+*/
+
+int		get_nbr_ants(t_data *data, char *line);
+int		aff_test_way(t_data *data);
+int		ants_moove(t_data *data);
+int		init_tbl_ants(t_data *data, t_way **tbl);
+int		display_moove(t_way **tbl, t_data *data);
+int		way_manager(t_data *data);
+
+/*
+** ft_parsing.c **
+*/
+
+int		ft_parsing(t_data *data, char *line);
+int		pars_room(t_data *data, char *line, int special);
+int		pars_link(t_data *data, char *line);
+
+int		check_line_room(char *line);
+
+/*
+** new_room .c **
+*/
+
+t_room	*ft_new_room(char *line, int special);
+int		ft_plus_connect(t_room *room, t_room *newdest);
+
+/*
+** ft_dijktra.c **
+*/
+
+int		check_way(t_data *data, int weight, t_room *room, t_room *prev);
+
+/*
+** Other **
+*/
+
+int		aff_test_rev_way(t_data *data);
+t_way	*ft_new_room_way(t_room *room, t_way *next_room);
+int		get_way(t_data *data);
 
 #endif
