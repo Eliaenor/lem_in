@@ -12,17 +12,6 @@
 
 #include "lem-in.h"
 
-int		ft_setup(t_data *data)
-{
-	data-> rooms = NULL;
-	data-> first_room = NULL;
-	data-> last_room = NULL;
-	data-> way = NULL;
-	data-> first_way = NULL;
-	data-> last_way = NULL;
-	return (0);
-}
-
 int		main(void)
 {
 	char	*line;
@@ -43,9 +32,20 @@ int		main(void)
 			return (1);
 		}
 		if (ret == 2)
-			break;
+			break ;
 	}
 	way_manager(&data);
+	return (0);
+}
+
+int		ft_setup(t_data *data)
+{
+	data-> rooms = NULL;
+	data-> first_room = NULL;
+	data-> last_room = NULL;
+	data-> way = NULL;
+	data-> first_way = NULL;
+	data-> last_way = NULL;
 	return (0);
 }
 

@@ -55,42 +55,44 @@ typedef struct	s_data
 ** main.c **
 */
 
+int		ft_setup(t_data *data);
+int		display_moove(t_way **tbl, t_data *data);
 int		get_nbr_ants(t_data *data, char *line);
-int		aff_test_way(t_data *data);
+
+/*
+** way.c **
+*/
+
+int		get_way(t_data *data);
+t_way	*ft_new_room_way(t_room *room, t_way *next_room);
+int		way_manager(t_data *data);
 int		ants_moove(t_data *data);
 int		init_tbl_ants(t_data *data, t_way **tbl);
-int		display_moove(t_way **tbl, t_data *data);
-int		way_manager(t_data *data);
 
 /*
 ** ft_parsing.c **
 */
 
 int		ft_parsing(t_data *data, char *line);
+int		pars_start_end(t_data *data, char *line, int special);
 int		pars_room(t_data *data, char *line, int special);
-int		pars_link(t_data *data, char *line);
-
 int		check_line_room(char *line);
 
-/*
-** new_room .c **
-*/
-
-t_room	*ft_new_room(char *line, int special);
-int		ft_plus_connect(t_room *room, t_room *newdest);
 
 /*
 ** ft_dijktra.c **
 */
 
 int		check_way(t_data *data, int weight, t_room *room, t_room *prev);
+int		ft_plus_connect(t_room *room, t_room *newdest);
+t_room	*ft_new_room(char *line, int special);
 
 /*
-** Other **
+** main.c **
 */
 
-int		aff_test_rev_way(t_data *data);
-t_way	*ft_new_room_way(t_room *room, t_way *next_room);
-int		get_way(t_data *data);
+int		split_parsing(t_data *data, char *line);
+int		pars_link(t_data *data, char *line);
+
 
 #endif

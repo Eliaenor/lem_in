@@ -17,18 +17,12 @@ int		ft_parsing(t_data *data, char *line)
 	ft_putendl(line);
 	if (ft_strcmp(line, "##start") == 0)
 	{
-		free(line);
-		get_next_line(0, &line);
-		ft_putendl(line);
-		if (pars_room(data, line, FIRST) == 1)
+		if (pars_start_end(data, line, FIRST) == 1)
 			return (1);
 	}
 	else if (ft_strcmp(line, "##end") == 0)
 	{
-		free(line);
-		get_next_line(0, &line);
-		ft_putendl(line);
-		if (pars_room(data, line, 2) == 1)
+		if (pars_start_end(data, line, LAST) == 1)
 			return (1);
 	}
 	else if (line[0] == '#')
@@ -39,20 +33,17 @@ int		ft_parsing(t_data *data, char *line)
 			return (1);
 	}
 	else
-	{
-		if (data->first_room == NULL)
-		{
-			ft_putstr("ERROR : No Start Room.\n");
-			return (1);
-		}
-		if (data->last_room == NULL)
-		{
-			ft_putstr("ERROR : No End Room.\n");
-			return (1);
-		}
-		if (pars_link(data, line) == 1)
-			return (2);
-	}
+		return (split_parsing(data, line));
+	return (0);
+}
+
+int		pars_start_end(t_data *data, char *line, int special)
+{
+	free(line);
+	get_next_line(0, &line);
+	ft_putendl(line);
+	if (pars_room(data, line, special) == 1)
+		return (1);
 	return (0);
 }
 
@@ -78,31 +69,6 @@ int		pars_room(t_data *data, char *line, int special)
 	if (special == LAST)
 		data->last_room = room;
 	free(line);
-	return (0);
-}
-
-int		pars_link(t_data *data, char *line)
-{
-	t_room	*src;
-	t_room	*dest;
-	char	**linesplit;
-
-	linesplit = ft_strsplit(line, '-');
-	free(line);
-	if (linesplit[2] != NULL)
-		return (1);
-	src = data->first_room;
-	while (src && ft_strcmp(src->name, linesplit[0]) != 0)
-		src = src->next;
-	if (src == NULL)
-		return (1);
-	dest = data->first_room;
-	while (dest && ft_strcmp(dest->name, linesplit[1]) != 0)
-		dest = dest->next;
-	if (dest == NULL)
-		return (1);
-	ft_plus_connect(src, dest);
-	free(linesplit);
 	return (0);
 }
 

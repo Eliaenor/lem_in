@@ -51,10 +51,6 @@ int		way_manager(t_data *data)
 		ft_putstr("ERROR : No complete way.\n");
 		return (1);
 	}
-	/*aff_test_rev_way(&data);
-	ft_putstr("\n");
-	aff_test_way(&data);
-	ft_putstr("\n");*/
 	ants_moove(data);
 	return (0);
 }
